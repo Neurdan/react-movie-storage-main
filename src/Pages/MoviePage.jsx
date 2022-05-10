@@ -36,7 +36,7 @@ const MoviePage = () => {
             </div>
             <div className="cards-block">
                 {
-                    movieCards.length !== 0 ? movieCards : <p>{'You can find something'}</p>
+                    movieCards.length !== 0 ? movieCards : <p>{'You need to add or import movies'}</p>
                 }
             </div>
             <Modal active={modalActive} setActive={setModalActive} type={"AddMovie"}/>
