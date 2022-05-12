@@ -17,6 +17,7 @@ You need to wait until the server api container starts.
 
 ### {"message":"[App] Init Mode: application","level":"info","timestamp":"2022-05-12 10:22:42+0300"}
 ### {"message":"[RestApiApp] STARTING AT PORT [8000] ADDRESS [::]","level":"info","timestamp":"2022-05-12 10:22:43+0300"}
+## And only after that you can run the reaction application
 
 After starting the api server, you can proceed to the launch of the client part
 
