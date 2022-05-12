@@ -11,7 +11,12 @@ or if you need a different port to run, you can use this command:
 #### `docker run --name movies -p 8001:8000 webbylabhub/movies `
 **Note: in this command port is 8001**
 
-You need to wait until the server api container starts
+You need to wait until the server api container starts.
+
+### **Note: you need to wait for your api to run fully until you see the following text in the console:**
+
+### {"message":"[App] Init Mode: application","level":"info","timestamp":"2022-05-12 10:22:42+0300"}
+### {"message":"[RestApiApp] STARTING AT PORT [8000] ADDRESS [::]","level":"info","timestamp":"2022-05-12 10:22:43+0300"}
 
 After starting the api server, you can proceed to the launch of the client part
 
