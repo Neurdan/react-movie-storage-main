@@ -1,9 +1,10 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteMovieThunk, setResultThunk} from "../../redux/actions/choseCardAction";
 import img from '../photo_2020-12-28_16-51-34.jpg';
 import {getNewItems} from "../../redux/actions/moviesActions";
+import Modal from "../Modal/Modal";
 
 const ChoseCard = () => {
     const isEmpty = (obj) => {
@@ -28,19 +29,23 @@ const ChoseCard = () => {
             </span>
         )
     })
-    const clickDeleteHandle = async (e, id) =>{
+    const clickDeleteHandle = async (e, id) => {
         e.preventDefault();
         await dispatch(deleteMovieThunk(id))
         setTimeout(async () => {
-            await dispatch(getNewItems(false))
-        }, 500);
+            await dispatch(getNewItems(true))
+        }, 1000);
         history(-1)
     }
     useEffect(() => {
         window.scrollTo(0, 0,);
         dispatch(setResultThunk(id))
     }, [])
-
+    const [modalActive, setModalActive] = useState(false)
+    const deleteHandleClick = (e) => {
+        setModalActive(true)
+        //clickDeleteHandle(e, id)
+    }
     return (
         <div className="chose-card">
             <div className="chose-card__top">
@@ -48,7 +53,7 @@ const ChoseCard = () => {
                     <span onClick={() => history(-1)}>Go Back</span>
                 </div>
                 <div className="chose-card__delete">
-                    {!isEmpty(result) && <span onClick={(e)=>clickDeleteHandle(e, id)}>Delete film</span> }
+                    {!isEmpty(result) && <span onClick={deleteHandleClick}>Delete film</span>}
                 </div>
             </div>
             {!isEmpty(result)
@@ -78,6 +83,7 @@ const ChoseCard = () => {
                 : <div>Film not found</div>
 
             }
+            <Modal active={modalActive} setActive={setModalActive} type={"DeleteMovie"} callback={(e)=>clickDeleteHandle(e,id)}/>
         </div>
     )
 }

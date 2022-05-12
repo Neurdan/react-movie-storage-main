@@ -31,7 +31,7 @@ const ImportPage = () => {
             })
                 .then((data)=>{
                     if (data.data.error) {
-                        setErrorFile(data.data.error.code)
+                        setErrorFile('Your file is invalid')
                     } else {
                         setErrorFile('')
                     }

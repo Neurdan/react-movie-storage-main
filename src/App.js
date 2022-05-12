@@ -18,10 +18,11 @@ function App() {
 
     const dispatch = useDispatch();
     const {apiKey, urlApi} = useSelector(({login}) => login)
+    let API_URL = process.env.REACT_APP_API_URL ||'http://localhost:8001/api/v1'
 
     useEffect(() => {
         if (apiKey === '') {
-            dispatch(createSessionThunk(process.env.REACT_APP_API_URL))
+            dispatch(createSessionThunk(API_URL))
             setIsLogged(true)
         }
     }, [apiKey])

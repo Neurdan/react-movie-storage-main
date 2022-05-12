@@ -13,6 +13,8 @@ const FindPage = () => {
     }
     const {findResult, isFetchingMovie, errorFind, query} = useSelector(({movies}) => movies)
     const [errorFetch, setErrorFetch] = useState('')
+    const [isFinded, setIsFinded] = useState(false)
+    const [findQuery, setFindQuery] = useState('')
     useEffect(() => {
         if (!isEmpty(errorFind)) {
             let errorText = `${errorFind.code}: `
@@ -36,18 +38,25 @@ const FindPage = () => {
                      key={item.id}
         />
     })
-    const clickEnter = e => {
+    const clickEnter = async e => {
         if (e.keyCode === 13 && findFieldValue.length > 0) {
-            dispatch(getFindResultThunk(findFieldValue))
+            await dispatch(getFindResultThunk(findFieldValue))
+            setFindQuery(findFieldValue)
+            setIsFinded(true)
         }
     }
-    const onFindClickHandle = () => {
+    const onFindClickHandle = async () => {
         if (findFieldValue.length > 0) {
-            dispatch(getFindResultThunk(findFieldValue))
+            await dispatch(getFindResultThunk(findFieldValue))
+            setFindQuery(findFieldValue)
+            setIsFinded(true)
         }
 
     }
     const onFindChangeHandle = e => {
+        if (e.target.value.charAt(0) === ' ') return
+        setFindQuery('')
+        setIsFinded(false)
         setFindFieldValue(e.target.value)
     }
     return (
@@ -70,9 +79,14 @@ const FindPage = () => {
                 </div>
             </div>
             <div className="find-page__content">
+                {isFinded ? <div className='find-page__query-text'>{`on query ${findQuery} you found:`}</div> : ''}
                 <div className="cards-block">
+
                     {
-                        movieCards.length !== 0 ? movieCards : <p>{'You can find something'}</p>
+                        movieCards.length !== 0 && movieCards
+                    }
+                    {
+                        (isFinded && movieCards.length === 0) && <div>Nothing</div>
                     }
                 </div>
             </div>

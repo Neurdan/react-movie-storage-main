@@ -53,7 +53,6 @@ const LoginPage = () => {
     }
     const onSubmitFormLoginHandle = async e => {
         e.preventDefault();
-        console.log(email, password)
         await dispatch(createSessionThunk({
             "email": email,
             "password": password
