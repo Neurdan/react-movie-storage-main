@@ -23,7 +23,7 @@ const ImportPage = () => {
                 selectedFile,
                 "movies.txt"
             );
-            axios.post('http://localhost:8001/api/v1/movies/import', formData, {
+            axios.post(`${process.env.REACT_APP_API_URL}/movies/import`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': API_KEY,
