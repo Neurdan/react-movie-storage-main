@@ -23,7 +23,10 @@ function App() {
     useEffect(() => {
         if (apiKey === '') {
             dispatch(createSessionThunk(API_URL))
-            setIsLogged(true)
+            setTimeout(()=>{
+                setIsLogged(true)
+
+            }, 500)
         }
     }, [apiKey])
     const Loader = <div className='loader loader--modal'>

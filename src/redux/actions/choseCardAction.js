@@ -1,18 +1,19 @@
 import axios from "axios";
 import {API_KEY} from "../../components/API/apiUrl";
+import {getNewItems} from "./moviesActions";
 
 export const SET_RESULT = 'SET_RESULT';
 export const SET_FETCHING = 'SET_FETCHING';
 
-const setFetchingAC = () => {
-    return {type: SET_FETCHING}
+const setFetchingAC = (value) => {
+    return {type: SET_FETCHING, value}
 }
 const setResultAC = (result) => {
     return {type: SET_RESULT, result}
 }
 export const setResultThunk = (id) => {
     return (dispatch, getState) => {
-        dispatch(setFetchingAC(true));
+        //dispatch(setFetchingAC(true));
 
         axios.get(`${getState().login.urlApi}/movies/${id}`, {
             headers: {
@@ -22,10 +23,10 @@ export const setResultThunk = (id) => {
         })
             .then(({data}) => {
                 dispatch(setResultAC(data.data));
+                //dispatch(setFetchingAC(false));
             })
             .catch(err => console.log(err))
 
-        dispatch(setFetchingAC(false));
     }
 }
 
@@ -38,7 +39,10 @@ export const deleteMovieThunk = (id) => {
                 'Authorization': getState().login.apiKey
             },
         })
+            .then(()=>{
+                dispatch(setFetchingAC(false));
+                dispatch(getNewItems())
+            })
             .catch(err => console.log(err))
-        dispatch(setFetchingAC(false));
     }
 }

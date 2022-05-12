@@ -21,6 +21,7 @@ const Modal = ({active, setActive, type, callback}) => {
     }
     const dispatch = useDispatch();
     const {error, isFetchingAdding} = useSelector(({movies}) => movies)
+    const {isFetching} = useSelector(({choseCard}) => choseCard)
     const [errorFetch, setErrorFetch] = useState([])
     const [actorValues, setActorValues] = useState([{nameActor: ""}]);
     const [formFields, setFormFields] = useState([{title: ''}, {year: ''}])
@@ -28,7 +29,6 @@ const Modal = ({active, setActive, type, callback}) => {
     const [selectedOption, setSelectedOption] = useState({});
     const [showActorsField, setShowActorsField] = useState(true);
     const [formValid, setFormValid] = useState()
-
     useEffect(() => {
         if (!isEmpty(error)) {
             let errorText = []
@@ -36,22 +36,20 @@ const Modal = ({active, setActive, type, callback}) => {
             for (let key in error.fields) {
                 let errorTranslate = error.fields[key] === 'REQUIRED' ? `field ${key} is Required to filling`
                     : error.fields[key] === 'NOT_POSITIVE_INTEGER' ? `please enter a number to ${key} field`
-                        : error.fields[key] === 'TOO_LOW' ? `please enter a later ${key}` : ''
+                        : error.fields[key] === 'TOO_LOW' ? `please enter a later ${key}`
+                            : error.fields[key] === 'TOO_LONG' ? `your ${key} so long`
+                            : error.fields[key] === 'NOT_UNIQUE' ? `movie exist with this ${key}`
+                            : error.fields[key] === 'TOO_HIGH' ? `enter a ${key} early` : ''
                 errorText[i] = `${errorTranslate}`
                 i++;
             }
             setErrorFetch(errorText)
         } else {
+            setFormFields([{title: ''}, {year: ''}])
+            setSelectedOption({})
+            setActorValues([{nameActor: ""}])
             setErrorFetch([])
-            setTimeout(async () => {
-                await dispatch(getNewItems())
-                setFormFields([{title: ''}, {year: ''}])
-                setSelectedOption({})
-
-            }, 1000);
-
-            setActive(false);
-
+            setActive(false)
         }
 
     }, [error])
@@ -104,9 +102,7 @@ const Modal = ({active, setActive, type, callback}) => {
                 formData.actors = resultActors
             }
             await dispatch(addMovieThunk(formData))
-            setTimeout(() => {
-                dispatch(getNewItems())
-            }, 1000)
+
         } else {
             setFormValid(false);
             return
@@ -178,6 +174,11 @@ const Modal = ({active, setActive, type, callback}) => {
         </div>
         : type === 'DeleteMovie'
             ? <div className='modal__delete'>
+                {isFetching && <div className='loader loader--modal'>
+                    <div className="loader__wrapper">
+                        Loading...
+                    </div>
+                </div>}
                 <span>Sure delete the movie?</span>
                 <div className="modal__buttons-delete">
                     <button onClick={callback} className="button">Yes</button>

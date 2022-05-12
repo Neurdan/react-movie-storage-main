@@ -11,6 +11,7 @@ const ImportPage = () => {
         setSelectedFile(e.target.files[0])
         setImportedFile(false)
     }
+    let API_URL = process.env.REACT_APP_API_URL ||'http://localhost:8001/api/v1'
     let history = useNavigate();
 
     const onFileUpload = async () => {
@@ -23,7 +24,7 @@ const ImportPage = () => {
                 selectedFile,
                 "movies.txt"
             );
-            axios.post(`${process.env.REACT_APP_API_URL}/movies/import`, formData, {
+            axios.post(`${API_URL}/movies/import`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': API_KEY,
@@ -33,7 +34,9 @@ const ImportPage = () => {
                     if (data.data.error) {
                         setErrorFile('Your file is invalid')
                     } else {
+                        setSelectedFile(null)
                         setErrorFile('')
+                        history("/")
                     }
                 })
 

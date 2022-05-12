@@ -65,6 +65,11 @@ table {
 
   }
 
+  &__middle {
+    margin-top: 10px;
+    margin-bottom: 25px;
+  }
+
   &__add-movie {
     cursor: pointer;
     font-size: 24px;
@@ -488,5 +493,58 @@ input[type="file"] {
     img {
       max-width: 75%;
     }
+  }
+}
+
+.pagination {
+  button {
+    margin: 5px;
+    background: none;
+    border: 2px solid black;
+    border-radius: 10px;
+    color: black;
+    cursor: pointer;
+    transition: background .15s linear;
+
+    &:hover {
+      background: black;
+      color: white;
+    }
+
+    &:disabled {
+      border-color: gray;
+
+      &:hover {
+        background: none;
+        cursor: unset;
+        color: black;
+      }
+    }
+  }
+
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+
+  &__item {
+    padding: 3px 8px;
+    margin: 5px;
+    border: 2px solid black;
+    cursor: pointer;
+    transition: background .15s linear;
+
+    &:hover {
+      background: black;
+      color: white;
+    }
+  }
+
+  &__current {
+    padding: 3px 8px;
+    margin: 5px;
+    border: 2px solid black;
+    cursor: pointer;
+    background: black;
+    color: white;
   }
 }

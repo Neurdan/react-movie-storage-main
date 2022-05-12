@@ -32,10 +32,7 @@ const ChoseCard = () => {
     const clickDeleteHandle = async (e, id) => {
         e.preventDefault();
         await dispatch(deleteMovieThunk(id))
-        setTimeout(async () => {
-            await dispatch(getNewItems(true))
-        }, 1000);
-        history(-1)
+        history('/')
     }
     useEffect(() => {
         window.scrollTo(0, 0,);
@@ -83,7 +80,7 @@ const ChoseCard = () => {
                 : <div>Film not found</div>
 
             }
-            <Modal active={modalActive} setActive={setModalActive} type={"DeleteMovie"} callback={(e)=>clickDeleteHandle(e,id)}/>
+            <Modal active={modalActive} setActive={setModalActive} type={"DeleteMovie"} callback={(e) => clickDeleteHandle(e, id)}/>
         </div>
     )
 }

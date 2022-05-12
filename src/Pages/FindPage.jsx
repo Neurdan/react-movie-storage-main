@@ -12,20 +12,24 @@ const FindPage = () => {
         return true;
     }
     const {findResult, isFetchingMovie, errorFind, query} = useSelector(({movies}) => movies)
-    const [errorFetch, setErrorFetch] = useState('')
+    const [errorFetch, setErrorFetch] = useState([])
     const [isFinded, setIsFinded] = useState(false)
     const [findQuery, setFindQuery] = useState('')
     useEffect(() => {
         if (!isEmpty(errorFind)) {
-            let errorText = `${errorFind.code}: `
+            let errorText = []
+            let i = 0;
             for (let key in errorFind.fields) {
-                errorText += ` ${key} ${errorFind.fields[key]}`
+                let errorTranslate = errorFind.fields[key] === 'TOO_SHORT'
+                    ? `you try to find so short query`
+                    :  ''
+                errorText[i] = `${errorTranslate}`
+                i++;
             }
             setErrorFetch(errorText)
         } else {
-            setErrorFetch('')
+            setErrorFetch([])
         }
-
     }, [errorFind])
     const [findFieldValue, setFindFieldValue] = useState(query)
     let history = useNavigate();
@@ -71,7 +75,14 @@ const FindPage = () => {
                     <span onClick={() => history(-1)}>Go Back</span>
                 </div>
                 <div className="find-page__search-block">
-                    {(errorFetch !== '') && <span className='error-span'> {errorFetch}</span>}
+                    {(errorFetch.length > 0) && <div className='error-span'>Errors:</div>}
+                    {(errorFetch.length > 0) &&
+
+                    errorFetch.map((el, index) => {
+                        return <div key={`error_${index}`} className='error-span'> {el}</div>
+                    })
+
+                    }
                     <input placeholder='Type here actor name or title film' type="text" value={findFieldValue}
                            onKeyDown={e => clickEnter(e)}
                            onChange={onFindChangeHandle}/>
