@@ -33,7 +33,7 @@ export const setResultThunk = (id) => {
 export const deleteMovieThunk = (id) => {
     return (dispatch, getState) => {
         dispatch(setFetchingAC(true));
-        axios.delete(`http://localhost:8001/api/v1/movies/${id}`, {
+        axios.delete(`${getState().login.urlApi}/movies/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': getState().login.apiKey
