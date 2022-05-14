@@ -2,36 +2,37 @@ import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import Card from "../components/Card/Card";
-import {getFindResultThunk, getNewItems} from "../redux/actions/moviesActions";
+import {getFindResultThunk} from "../redux/actions/moviesActions";
+import {isEmpty} from "../Helpers/helpers";
 
 const FindPage = () => {
-    const isEmpty = (obj) => {
-        for (let key in obj) {
-            return false;
-        }
-        return true;
-    }
     const {findResult, isFetchingMovie, errorFind, query} = useSelector(({movies}) => movies)
     const [errorFetch, setErrorFetch] = useState([])
     const [isFinded, setIsFinded] = useState(false)
     const [findQuery, setFindQuery] = useState('')
+    const [findFieldValue, setFindFieldValue] = useState(query)
+
+
+    const proccessingErrors = () => {
+        let errorText = []
+        let i = 0;
+        for (let key in errorFind.fields) {
+            let errorTranslate = errorFind.fields[key] === 'TOO_SHORT'
+                ? `you try to find so short query`
+                : ''
+            errorText[i] = `${errorTranslate}`
+            i++;
+        }
+        return errorText
+    }
+
     useEffect(() => {
         if (!isEmpty(errorFind)) {
-            let errorText = []
-            let i = 0;
-            for (let key in errorFind.fields) {
-                let errorTranslate = errorFind.fields[key] === 'TOO_SHORT'
-                    ? `you try to find so short query`
-                    :  ''
-                errorText[i] = `${errorTranslate}`
-                i++;
-            }
-            setErrorFetch(errorText)
+            setErrorFetch(proccessingErrors())
         } else {
             setErrorFetch([])
         }
     }, [errorFind])
-    const [findFieldValue, setFindFieldValue] = useState(query)
     let history = useNavigate();
     const dispatch = useDispatch();
     const movieCards = findResult?.map(item => {
@@ -42,18 +43,19 @@ const FindPage = () => {
                      key={item.id}
         />
     })
-    const clickEnter = async e => {
+    const logicClick = async () => {
+        await dispatch(getFindResultThunk(findFieldValue))
+        setFindQuery(findFieldValue)
+        setIsFinded(true)
+    }
+    const clickEnter = e => {
         if (e.keyCode === 13 && findFieldValue.length > 0) {
-            await dispatch(getFindResultThunk(findFieldValue))
-            setFindQuery(findFieldValue)
-            setIsFinded(true)
+            logicClick();
         }
     }
-    const onFindClickHandle = async () => {
+    const onFindClickHandle = () => {
         if (findFieldValue.length > 0) {
-            await dispatch(getFindResultThunk(findFieldValue))
-            setFindQuery(findFieldValue)
-            setIsFinded(true)
+            logicClick()
         }
 
     }

@@ -1,5 +1,4 @@
 import axios from "axios";
-import {API_KEY} from "../../components/API/apiUrl";
 import {getNewItems} from "./moviesActions";
 
 export const SET_RESULT = 'SET_RESULT';
@@ -13,7 +12,6 @@ const setResultAC = (result) => {
 }
 export const setResultThunk = (id) => {
     return (dispatch, getState) => {
-        //dispatch(setFetchingAC(true));
 
         axios.get(`${getState().login.urlApi}/movies/${id}`, {
             headers: {
@@ -23,7 +21,6 @@ export const setResultThunk = (id) => {
         })
             .then(({data}) => {
                 dispatch(setResultAC(data.data));
-                //dispatch(setFetchingAC(false));
             })
             .catch(err => console.log(err))
 

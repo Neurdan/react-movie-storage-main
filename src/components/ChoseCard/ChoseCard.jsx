@@ -3,16 +3,10 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteMovieThunk, setResultThunk} from "../../redux/actions/choseCardAction";
 import img from '../photo_2020-12-28_16-51-34.jpg';
-import {getNewItems} from "../../redux/actions/moviesActions";
 import Modal from "../Modal/Modal";
+import {isEmpty} from "../../Helpers/helpers";
 
 const ChoseCard = () => {
-    const isEmpty = (obj) => {
-        for (let key in obj) {
-            return false;
-        }
-        return true;
-    }
     let poster = img;
     let history = useNavigate();
     const params = useParams();
@@ -55,7 +49,7 @@ const ChoseCard = () => {
             </div>
             {!isEmpty(result)
                 ? <div className="chose-card__wrapper">
-                    <img src={poster}/>
+                    <img src={poster} alt='chose-card-poster'/>
                     <div className="chose-card__information">
                         <div className="chose-card__block chose-card__block--title">
                             <span>Title: </span>
